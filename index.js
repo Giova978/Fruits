@@ -22,6 +22,30 @@ const fruits = [
         comboAdded: false,
     },
     {
+        type: "tomtato",
+        image: document.getElementById("tomato"),
+        splash: document.getElementById("splashTomato"),
+        comboAdded: false,
+    },
+    {
+        type: "orange",
+        image: document.getElementById("orange"),
+        splash: document.getElementById("splashOrange"),
+        comboAdded: false,
+    },
+    {
+        type: "limon",
+        image: document.getElementById("limon"),
+        splash: document.getElementById("splashLimon"),
+        comboAdded: false,
+    },
+    {
+        type: "frutaDragon",
+        image: document.getElementById("frutaDragon"),
+        splash: document.getElementById("splashDragon"),
+        comboAdded: false,
+    },
+    {
         type: "bomb",
         image: document.getElementById("bomb"),
         splash: document.getElementById("explosion"),
@@ -29,20 +53,24 @@ const fruits = [
     },
 ];
 
+// Fruis in the canvas
 const fruitsToDraw = {};
 /*  [
     [x, y]
 ]
 */
+// If a fruit get destroyed will insert a splash here
 const blood = [];
 
+// Set to draw over other pixels
 ctx.globalCompositeOperation = "destination-over";
 
+// Insert in fruitsToDraw, generate random trajectory for the fruits
 function sendCube(index) {
     randomForOut = Math.floor(Math.random() * (770 - 600) + 700);
     radomForIn = Math.floor(Math.random() * (270 - 150) + 150);
     randomOut = Math.floor(Math.random() * (randomForOut - 400) + 400);
-    randomCurve = Math.floor(Math.random() * (500 - 0) + 0);
+    randomCurve = Math.floor(Math.random() * 500);
     randomIn = Math.floor(Math.random() * (radomForIn - 20) + 20);
     randomHeight = Math.floor(Math.random() * (900 - 600) + 600);
 
@@ -101,15 +129,16 @@ function sendCube(index) {
     };
 }
 
+// In charge of move the fruit trough the canvas and check if gets destroyed
 function drawFruit({ fruit, points, cBez }) {
     const actualPos = points[0];
     points.splice(0, 6);
     ctx.beginPath();
     // drawBez(cBez);
-    ctx.drawImage(fruit.image, actualPos.x, actualPos.y, 30, 30);
+    ctx.drawImage(fruit.image, actualPos.x, actualPos.y, 50, 50);
     ctx.stroke();
 
-    if (between(x, actualPos.x - 10, actualPos.x + 10) && between(y, actualPos.y - 10, actualPos.y + 10)) {
+    if (between(x, actualPos.x - 20, actualPos.x + 20) && between(y, actualPos.y - 20, actualPos.y + 20)) {
         blood.push({
             splash: fruit.splash,
             x: actualPos.x,
@@ -134,8 +163,10 @@ function drawFruit({ fruit, points, cBez }) {
     }
 }
 
+// In charge of telling the drawFruit what to draw
 function drawFruitMain() {
     ctx.clearRect(0, 0, c.width, c.height);
+    // Check if a fruit finished his cylce and remove it
     for (const index in fruitsToDraw) {
         const fruit = fruitsToDraw[index];
         if (fruit.points && fruit.points.length <= 20) {
@@ -149,6 +180,7 @@ function drawFruitMain() {
         drawFruit(fruit);
     }
 
+    // Paint the splash "blood"
     for (let i = 0; i < blood.length; i++) {
         const splash = blood[i].splash;
         ctx.beginPath();
@@ -156,11 +188,13 @@ function drawFruitMain() {
     }
 }
 
+// Entry point of the cycle
 function drawMain() {
     if (Object.keys(fruitsToDraw).length <= 0) {
         playing = false;
     }
 
+    // Generate random fruits and call drawFruitMain to draw them
     if (!playing) {
         playing = true;
 
@@ -178,20 +212,21 @@ function drawMain() {
 
 drawMain();
 
+// Fot checkin if the cursos is in certain range of the fruit itself
 function between(x, min, max) {
     return x >= min && x <= max;
 }
 
 function findCBezPoints(b) {
-    var pts = [b[0]];
-    var lastPt = b[0];
-    var tests = 5000;
-    for (var t = 0; t <= tests; t++) {
-        var pt = getCubicBezierXYatT(b[0], b[1], b[2], b[3], t / tests);
-        var dx = pt.x - lastPt.x;
-        var dy = pt.y - lastPt.y;
-        var d = Math.sqrt(dx * dx + dy * dy);
-        var dInt = parseInt(d);
+    let pts = [b[0]];
+    let lastPt = b[0];
+    let tests = 5000;
+    for (let t = 0; t <= tests; t++) {
+        let pt = getCubicBezierXYatT(b[0], b[1], b[2], b[3], t / tests);
+        let dx = pt.x - lastPt.x;
+        let dy = pt.y - lastPt.y;
+        let d = Math.sqrt(dx * dx + dy * dy);
+        let dInt = parseInt(d);
         if (dInt > 0 || t == tests) {
             lastPt = pt;
             pts.push(pt);
@@ -201,8 +236,8 @@ function findCBezPoints(b) {
 }
 
 function getCubicBezierXYatT(startPt, controlPt1, controlPt2, endPt, T) {
-    var x = CubicN(T, startPt.x, controlPt1.x, controlPt2.x, endPt.x);
-    var y = CubicN(T, startPt.y, controlPt1.y, controlPt2.y, endPt.y);
+    let x = CubicN(T, startPt.x, controlPt1.x, controlPt2.x, endPt.x);
+    let y = CubicN(T, startPt.y, controlPt1.y, controlPt2.y, endPt.y);
     return {
         x: x,
         y: y,
@@ -210,8 +245,8 @@ function getCubicBezierXYatT(startPt, controlPt1, controlPt2, endPt, T) {
 }
 
 function CubicN(T, a, b, c, d) {
-    var t2 = T * T;
-    var t3 = t2 * T;
+    let t2 = T * T;
+    let t3 = t2 * T;
     return a + (-a * 3 + T * (3 * a - a * T)) * T + (3 * b + T * (-6 * b + b * 3 * T)) * T + (c * 3 - c * 3 * T) * t2 + d * t3;
 }
 
@@ -235,15 +270,15 @@ c.addEventListener("mousemove", function (e) {
 
 function updateScore(scoreToAdd) {
     score += scoreToAdd;
-    scoreH1.innerHTML = `Tu puntuacion es: ${score}`;
+    scoreH1.innerHTML = `${score}`;
 }
 
 function addCombo() {
     combo += 1;
-    comboH1.innerHTML = `Llevas un combo de: ${combo}`;
+    comboH1.innerHTML = `${combo}`;
 }
 
 function resetCombo() {
     combo = 0;
-    comboH1.innerHTML = `Llevas un combo de: ${combo}`;
+    comboH1.innerHTML = `${combo}`;
 }

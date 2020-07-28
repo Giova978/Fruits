@@ -3,7 +3,9 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
+        <link rel="stylesheet" href="https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+        <link rel="stylesheet" href="style.css" />
+        <title>Juegito de frutas</title>
     </head>
     <body>
         <img src="sandia.png" alt="" id="sandia" width="20" height="20" hidden />
@@ -12,10 +14,22 @@
         <img src="splashBanana.png" alt="" id="splashBanana" width="20" height="20" hidden />
         <img src="bomba.png" alt="" id="bomb" width="20" height="20" hidden />
         <img src="explosion.png" alt="" id="explosion" width="20" height="20" hidden />
+        <img src="orange.png" alt="" id="orange" width="20" height="20" hidden />
+        <img src="splashNaranja.png" alt="" id="splashOrange" width="20" height="20" hidden />
+        <img src="limon.png" alt="" id="limon" width="20" height="20" hidden />
+        <img src="splashLimon.png" alt="" id="splashLimon" width="20" height="20" hidden />
+        <img src="frutaDragon.png" alt="" id="frutaDragon" width="20" height="20" hidden />
+        <img src="splashDragon.png" alt="" id="splashDragon" width="20" height="20" hidden />
+        <img src="tomato.png" alt="" id="tomato" width="20" height="20" hidden />
+        <img src="splashTomato.png" alt="" id="splashTomato" width="20" height="20" hidden />
 
-        <canvas width="800" height="800" id="canvas" style="border: 1px solid #000000;"></canvas>
-        <h1 id="score">Tu puntuacion es: 0</h1>
-        <h1 id="combo">Tu puntuacion es: 0</h1>
+        <canvas width="800" height="800" id="canvas" class="canvas"></canvas>
+        <div class="container">
+            <h1 class="score">Tu puntuacion es de:</h1>
+            <h2 id="score" class="score number">0</h2>
+            <h1 class="combo">Llevas un combo de:</h1>
+            <h2 id="combo" class="combo number">0</h2>
+        </div>
 
         <script src="index.js"></script>
     </body>

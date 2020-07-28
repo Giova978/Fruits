@@ -1,0 +1,56 @@
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap");
+* {
+  font-family: "Source Sans Pro", sans-serif;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  background-image: url("bomba.png");
+}
+
+.canvas {
+  margin-top: 1.25rem;
+  width: 800px;
+  height: 800px;
+  background-image: url("tileable_wood_texture.png");
+  background-repeat: repeat;
+}
+
+.container {
+  text-align: left;
+}
+
+.score,
+.combo {
+  padding: 0;
+  margin-left: 1.25rem;
+}
+
+.score {
+  letter-spacing: 3px;
+  font-size: 45px;
+  color: #13bff3;
+}
+.score.number {
+  text-align: center;
+  width: 5rem;
+  font-size: 50px;
+  margin-left: 15rem;
+  border: 5px #000 solid;
+}
+
+.combo {
+  color: #f54e00;
+  letter-spacing: 3px;
+  font-size: 45px;
+}
+.combo.number {
+  text-align: center;
+  width: 5rem;
+  font-size: 50px;
+  margin-left: 15rem;
+  border: 5px #000 solid;
+}
+
+/*# sourceMappingURL=style.css.map */
