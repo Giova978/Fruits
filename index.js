@@ -2,7 +2,9 @@ const c = document.getElementById("canvas");
 let ctx = c.getContext("2d");
 
 const scoreH1 = document.getElementById("score");
+const comboH1 = document.getElementById("combo");
 let score = 0;
+let combo = 0;
 
 let x, y, randomOut, randomCurve, randomIn, radomForIn, randomForOut, randomHeight;
 let playing = false;
@@ -11,16 +13,19 @@ const fruits = [
         type: "banana",
         image: document.getElementById("banana"),
         splash: document.getElementById("splashBanana"),
+        comboAdded: false,
     },
     {
         type: "waterMelon",
         image: document.getElementById("sandia"),
         splash: document.getElementById("splashSandia"),
+        comboAdded: false,
     },
     {
         type: "bomb",
         image: document.getElementById("bomb"),
         splash: document.getElementById("explosion"),
+        comboAdded: false,
     },
 ];
 
@@ -90,28 +95,35 @@ function sendCube(index) {
     const fruitToSelected = Math.floor(Math.random() * fruits.length);
 
     fruitsToDraw[index] = {
-        fruit: fruits[fruitToSelected],
+        fruit: Object.assign({}, fruits[fruitToSelected]),
         points: findCBezPoints(cBezSelected),
         cBez: cBezSelected,
     };
 }
 
 function drawFruit({ fruit, points, cBez }) {
+    const actualPos = points[0];
+    points.splice(0, 6);
     ctx.beginPath();
     // drawBez(cBez);
-    ctx.drawImage(fruit.image, points[0].x, points[0].y, 30, 30);
+    ctx.drawImage(fruit.image, actualPos.x, actualPos.y, 30, 30);
     ctx.stroke();
 
-    if (between(x, points[0].x - 10, points[0].x + 10) && between(y, points[0].y - 10, points[0].y + 10)) {
+    if (between(x, actualPos.x - 10, actualPos.x + 10) && between(y, actualPos.y - 10, actualPos.y + 10)) {
         blood.push({
             splash: fruit.splash,
-            x: points[0].x,
-            y: points[0].y,
+            x: actualPos.x,
+            y: actualPos.y,
         });
 
-        if (fruit.type === "bomb") updateScore(-3);
-
-        updateScore(1);
+        if (fruit.type === "bomb") {
+            updateScore(-3);
+            resetCombo();
+        } else {
+            updateScore(1);
+            addCombo();
+            fruit.comboAdded = true;
+        }
 
         let timeout = setTimeout(() => {
             blood.shift();
@@ -120,8 +132,6 @@ function drawFruit({ fruit, points, cBez }) {
 
         points.length = 0;
     }
-
-    points.splice(0, 6);
 }
 
 function drawFruitMain() {
@@ -129,6 +139,9 @@ function drawFruitMain() {
     for (const index in fruitsToDraw) {
         const fruit = fruitsToDraw[index];
         if (fruit.points && fruit.points.length <= 20) {
+            if (fruit.fruit.type != "bomb" && !fruit.fruit.comboAdded) {
+                resetCombo();
+            }
             delete fruitsToDraw[index];
             continue;
         }
@@ -223,4 +236,14 @@ c.addEventListener("mousemove", function (e) {
 function updateScore(scoreToAdd) {
     score += scoreToAdd;
     scoreH1.innerHTML = `Tu puntuacion es: ${score}`;
+}
+
+function addCombo() {
+    combo += 1;
+    comboH1.innerHTML = `Llevas un combo de: ${combo}`;
+}
+
+function resetCombo() {
+    combo = 0;
+    comboH1.innerHTML = `Llevas un combo de: ${combo}`;
 }
